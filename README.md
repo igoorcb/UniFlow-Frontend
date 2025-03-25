@@ -8,7 +8,7 @@ Este é o frontend do **UniFlow**, uma aplicação que gerencia tarefas, e-comme
 - **Vue Router 4**: Navegação.
 - **Pinia**: Gerenciamento de estado.
 - **Axios**: Requisições HTTP.
-- **Tailwind CSS**: Estilização.
+- **UIkit CSS**: Estilização.
 - **JWT**: Autenticação.
 - **Vite**: Build tool.
 
@@ -30,7 +30,7 @@ uniflow-frontend/
 
 ## Funcionalidades
 
-- **Todo List**: Criar, listar, atualizar e deletar tarefas (implementado).
+- **Todo List**: Criar, listar, atualizar e deletar tarefas (em desenvolvimento).
 - **E-commerce Dashboard**: Gerenciar produtos e vendas (em desenvolvimento).
 - **Calendário de Reuniões**: Agendar reuniões (em desenvolvimento).
 - **Mini E-commerce**: Catálogo e checkout (em desenvolvimento).
