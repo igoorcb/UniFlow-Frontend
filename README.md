@@ -73,6 +73,15 @@ A autenticação será feita com JWT:
 - Token é enviado no cabeçalho `Authorization` (`Bearer <token>`).
 - Rotas protegidas (ex.: `/dashboard`) exigem token.
 
+## Autenticação
+
+- Ao iniciar o app, você verá a tela de login/registro.
+- Para testar o login, use:
+  - **Email:** admin@teste.com
+  - **Senha:** 123456
+- O registro é simulado e não cria usuários reais.
+- O botão "Sair" faz logout e retorna para a tela de login.
+
 ## Próximos Passos
 
 - Implementar autenticação JWT.

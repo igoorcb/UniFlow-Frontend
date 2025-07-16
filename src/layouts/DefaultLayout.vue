@@ -1,31 +1,59 @@
 <template>
-  <div class="layout">
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <img src="/public/logo.svg" class="cursos-logo" @click="$router.push('/home')" alt="Logo" />
+  <div class="flex">
+    <aside class="fixed left-0 top-0 h-screen w-[220px] bg-white shadow-[2px_0_10px_rgba(0,0,0,0.1)] flex flex-col p-5 z-[1000]">
+      <div class="flex items-center justify-between">
+        <img src="/public/logo.svg" class="cursor-pointer" @click="$router.push('/home')" alt="Logo" />
       </div>
-
       <template v-for="(section, index) in menuSections" :key="index">
-        <span class="text-apps uk-margin-top">{{ section.title }}</span>
-        <nav class="sidebar-menu">
-          <button v-for="item in section.items" :key="item.path" class="menu-item"
-            :class="{ active: $route.path === item.path }" @click="$router.push(item.path)">
-            <img :src="item.icon" alt="" class="icon-menu" />
-            <span class="uk-margin-small-left">{{ item.label }}</span>
+        <span
+          :class="[
+            'font-normal leading-9 tracking-[0px] mb-[-10px] mt-4 transition-colors duration-300',
+            section.items.some(item => $route.path === item.path)
+              ? 'text-[#6c63ff] font-bold'
+              : 'text-[#999]'
+          ]"
+        >
+          {{ section.title }}
+        </span>
+        <nav class="mt-5 flex flex-col gap-2.5">
+          <button
+            v-for="item in section.items"
+            :key="item.path"
+            @click="$router.push(item.path)"
+            :class="[
+              'menu-item px-2.5 py-2 text-sm bg-transparent border-0 text-left cursor-pointer transition-colors duration-300 rounded-md mt-[-5px] flex items-center gap-2.5',
+              $route.path === item.path
+                ? 'bg-[#6c63ff] text-black font-semibold shadow-md'
+                : 'text-[#333] hover:bg-[#6c63ff] hover:text-white'
+            ]"
+          >
+            <img
+              :src="item.icon"
+              alt=""
+              class="w-[15px] mt-[-4px]"
+              :class="$route.path === item.path ? 'filter invert brightness-200' : ''"
+            />
+            <span class="ml-2">{{ item.label }}</span>
           </button>
         </nav>
       </template>
-
-      <div class="sidebar-footer">
-        <span class="text-apps uk-margin-top">Paginas</span>
-        <button class="menu-item" @click="$router.push('/settings')">
-          <img src="/public/lock.svg" alt="" class="icon-menu" />
-          <span class="uk-margin-small-left">Autenticação</span>
+      <div class="mt-auto mb-8 flex flex-col gap-2.5">
+        <span class="text-[#999] font-normal leading-9 tracking-[0px] mb-[-10px] mt-4">Paginas</span>
+        <button
+          class="menu-item px-2.5 py-2 text-sm text-[#333] bg-transparent border-0 text-left cursor-pointer transition-colors duration-300 rounded-md mt-[-5px] flex items-center gap-2.5 hover:bg-[#6c63ff] hover:text-white"
+          @click="$router.push('/settings')"
+          :class="$route.path === '/settings' ? 'bg-[#6c63ff] text-purple-500 font-semibold shadow-md' : ''"
+        >
+          <img src="/public/lock.svg" alt="" class="w-[15px] mt-[-4px]" :class="$route.path === '/settings' ? 'filter invert brightness-200' : ''" />
+          <span class="ml-2">Autenticação</span>
+        </button>
+        <button class="menu-item mt-2 text-red-500 flex items-center gap-2.5 px-2.5 py-2 text-sm bg-transparent border-0 text-left cursor-pointer transition-colors duration-300 rounded-md" @click="logout">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-[15px] mt-[-4px] inline" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1" /></svg>
+          <span class="ml-2">Sair</span>
         </button>
       </div>
     </aside>
-
-    <main class="main-content">
+    <main class="ml-[260px] p-5 w-[calc(100%-260px)]">
       <router-view />
     </main>
   </div>
@@ -54,97 +82,12 @@ export default {
       ],
     };
   },
+  methods: {
+    logout() {
+      localStorage.removeItem('isAuthenticated');
+      window.location.reload();
+    },
+  },
 };
 </script>
 
-<style scoped>
-.icon-menu {
-  width: 15px;
-  margin-top: -4px;
-}
-
-.layout {
-  display: flex;
-}
-
-.cursos-logo {
-  cursor: pointer;
-}
-
-.sidebar-footer {
-  margin-top: auto;
-  margin-bottom: 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.sidebar {
-  width: 220px;
-  height: 100vh;
-  position: fixed;
-  left: 0;
-  top: 0;
-  background: white;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  z-index: 1000;
-}
-
-.sidebar-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.sidebar-menu {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.menu-item {
-  padding: 10px;
-  font-size: 14px;
-  color: #333;
-  background: transparent;
-  border: none;
-  text-align: left;
-  cursor: pointer;
-  transition: background 0.3s;
-  border-radius: 5px;
-  margin-top: -5px;
-}
-
-.menu-item:hover {
-  background: #6c63ff;
-  color: white;
-}
-
-.menu-item.active {
-  background: #6c63ff;
-  color: white;
-}
-
-.menu-item.active .icon-menu {
-  filter: invert(1) brightness(2);
-  /* Torna o ícone branco */
-}
-
-.main-content {
-  margin-left: 260px;
-  padding: 20px;
-  width: calc(100% - 260px);
-}
-
-.text-apps {
-  color: #999999;
-  font-weight: 400;
-  line-height: 36px;
-  letter-spacing: 0px;
-  margin-bottom: -10px;
-}
-</style>
