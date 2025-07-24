@@ -40,7 +40,7 @@
       <div class="mt-auto mb-8 flex flex-col gap-2.5">
         <span class="text-[#999] font-normal leading-9 tracking-[0px] mb-[-10px] mt-4">Paginas</span>
         <button
-          class="menu-item px-2.5 py-2 text-sm text-[#333] bg-transparent border-0 text-left cursor-pointer transition-colors duration-300 rounded-md mt-[-5px] flex items-center gap-2.5 hover:bg-[#6c63ff] hover:text-white"
+        class="menu-item px-2.5 py-2 text-sm text-[#333] bg-transparent border-0 text-left cursor-pointer transition-colors duration-300 rounded-md mt-[-5px] flex items-center gap-2.5 hover:bg-[#6c63ff] hover:text-white"
           @click="$router.push('/settings')"
           :class="$route.path === '/settings' ? 'bg-[#6c63ff] text-purple-500 font-semibold shadow-md' : ''"
         >

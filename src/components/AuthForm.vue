@@ -75,6 +75,8 @@
 
 <script setup>
 import { ref, reactive } from 'vue';
+import api from '../api';
+import auth from '../stores/auth';
 
 const isLogin = ref(true);
 const showForgot = ref(false);
@@ -93,36 +95,45 @@ function validateEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-function handleLogin() {
+async function handleLogin() {
   loginErrors.email = '';
   loginErrors.password = '';
   loginMessage.value = '';
   loginSuccess.value = false;
+
   if (!loginForm.email) loginErrors.email = 'Campo obrigatório';
   if (!loginForm.password) loginErrors.password = 'Campo obrigatório';
   if (loginForm.email && !validateEmail(loginForm.email)) loginErrors.email = 'Email inválido';
   if (loginForm.password && loginForm.password.length < 6) loginErrors.password = 'Mínimo 6 caracteres';
   if (loginErrors.email || loginErrors.password) return;
-  // Simulação de autenticação
-  if (loginForm.email === 'admin@teste.com' && loginForm.password === '123456') {
+
+  try {
+    const { data } = await api.post('/login', {
+      email: loginForm.email,
+      password: loginForm.password,
+    });
+    auth.setToken(data.token);
     loginMessage.value = 'Login realizado com sucesso!';
     loginSuccess.value = true;
+    // Redirecione para a tela de todos, se desejar:
+    // window.location.href = '/todos';
     setTimeout(() => {
       window.dispatchEvent(new CustomEvent('auth-success'));
     }, 800);
-  } else {
+  } catch (e) {
     loginMessage.value = 'Credenciais inválidas';
     loginSuccess.value = false;
   }
 }
 
-function handleRegister() {
+async function handleRegister() {
   registerErrors.name = '';
   registerErrors.email = '';
   registerErrors.password = '';
   registerErrors.confirmPassword = '';
   registerMessage.value = '';
   registerSuccess.value = false;
+
   if (!registerForm.name) registerErrors.name = 'Campo obrigatório';
   if (!registerForm.email) registerErrors.email = 'Campo obrigatório';
   if (!registerForm.password) registerErrors.password = 'Campo obrigatório';
@@ -131,13 +142,24 @@ function handleRegister() {
   if (registerForm.password && registerForm.password.length < 6) registerErrors.password = 'Mínimo 6 caracteres';
   if (registerForm.password !== registerForm.confirmPassword) registerErrors.confirmPassword = 'Senhas não coincidem';
   if (registerErrors.name || registerErrors.email || registerErrors.password || registerErrors.confirmPassword) return;
-  // Simulação de registro
-  registerMessage.value = 'Registro realizado! Faça login.';
-  registerSuccess.value = true;
-  setTimeout(() => {
-    isLogin.value = true;
-    registerMessage.value = '';
-  }, 1200);
+
+  try {
+    await api.post('/register', {
+      name: registerForm.name,
+      email: registerForm.email,
+      password: registerForm.password,
+      password_confirmation: registerForm.confirmPassword,
+    });
+    registerMessage.value = 'Registro realizado! Faça login.';
+    registerSuccess.value = true;
+    setTimeout(() => {
+      isLogin.value = true;
+      registerMessage.value = '';
+    }, 1200);
+  } catch (e) {
+    registerMessage.value = 'Erro ao registrar. Verifique os dados.';
+    registerSuccess.value = false;
+  }
 }
 </script>
 
